@@ -97,7 +97,6 @@
         </div>
 
         <table v-if="showProducts" class="table table-striped mt-4">
-            <div id="message-container"></div>
             <thead>
                 <tr>
                     <th>Nombre</th>
