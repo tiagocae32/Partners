@@ -1,6 +1,5 @@
 <template>
     <div class="container product-list">
-        <div id="message-container"></div>
         <h1 class="text-center">{{ showProducts ? 'Lista de productos' : 'Lista de Categorías' }}</h1>
         <button class="btn btn-primary mb-3" @click="toggleTable">
             {{ showProducts ? 'Ver Categorías' : 'Ver Productos' }}
@@ -98,6 +97,7 @@
         </div>
 
         <table v-if="showProducts" class="table table-striped mt-4">
+            <div id="message-container"></div>
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -210,15 +210,9 @@ export default {
                 });
             },      
         showMessage(message, type) {
-            const messageContainer = document.getElementById('message-container');
-            const messageElement = document.createElement('div');
-
-            messageElement.className = `message-${type}`;
-            messageElement.textContent = message;
-
-            messageContainer.appendChild(messageElement);
+            this.$toast.open({message,type});
             setTimeout(() => {
-                messageElement.remove();
+                this.$toast.clear()
             }, 3000);
         },
         async fetchProducts() {
@@ -300,6 +294,12 @@ export default {
             }
         },
         async createProduct() {
+
+            if (this.newProduct.categories.length === 0) {
+                this.showMessage("Selecciona al menos una categoría.", "danger");
+                 return;
+            }
+
             const formData = new FormData();
             formData.append('name', this.newProduct.name);
             formData.append('description', this.newProduct.description);
